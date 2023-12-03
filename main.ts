@@ -7,6 +7,17 @@ function denniSviceni () {
     predni.show()
     zadni.show()
 }
+function nastaveni () {
+    stop = 0
+    predni = neopixel.create(DigitalPin.P0, 8, NeoPixelMode.RGB)
+    zadni = neopixel.create(DigitalPin.P2, 8, NeoPixelMode.RGB)
+    wuKong.mecanumWheel(
+    wuKong.ServoList.S6,
+    wuKong.ServoList.S1,
+    wuKong.ServoList.S7,
+    wuKong.ServoList.S3
+    )
+}
 function rozsvitSvetla () {
     predni.clear()
     zadni.clear()
@@ -21,12 +32,10 @@ function rozsvitSvetla () {
     predni.show()
     zadni.show()
 }
+let stop = 0
 let zadni: neopixel.Strip = null
 let predni: neopixel.Strip = null
-let stop = 0
 basic.showIcon(IconNames.Yes)
-predni = neopixel.create(DigitalPin.P0, 8, NeoPixelMode.RGB)
-zadni = neopixel.create(DigitalPin.P2, 8, NeoPixelMode.RGB)
 // Denni sviceni
 basic.forever(function () {
     if (input.lightLevel() > 50) {
@@ -39,15 +48,9 @@ basic.forever(function () {
 })
 // Brzdova svetla
 basic.forever(function () {
-    if (grove.measureInCentimeters(DigitalPin.P1) < 20) {
-        basic.showString("B")
-        zadni.setPixelColor(1, neopixel.colors(NeoPixelColors.Red))
-        zadni.setPixelColor(6, neopixel.colors(NeoPixelColors.Red))
-        zadni.show()
+    if (grove.measureInCentimeters(DigitalPin.P1) > 20) {
+        wuKong.mecanumRun(wuKong.RunList.Front, 250)
     } else {
-        basic.showString("R")
-        zadni.setPixelColor(1, neopixel.colors(NeoPixelColors.Black))
-        zadni.setPixelColor(6, neopixel.colors(NeoPixelColors.Black))
-        zadni.show()
+        wuKong.mecanumStop()
     }
 })
